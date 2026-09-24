@@ -1,0 +1,165 @@
+---
+import Logo from './Logo.astro';
+import BeanScatter from './BeanScatter.astro';
+import { footerBeans } from '../data/beans';
+import { siteData } from '../data/site';
+
+const { footer } = siteData;
+---
+
+<footer class="site-footer" aria-label="Site Footer">
+  {/* Cluster of ~30 beans spilling outside bottom-left corner */}
+  <div class="footer-beans-corner" aria-hidden="true">
+    <BeanScatter
+      beans={footerBeans}
+      stageWidth={120}
+      stageHeight={240}
+    />
+  </div>
+
+  <div class="footer-grid">
+    {/* Column 1: Brand Wordmark & Tagline */}
+    <div class="footer-col brand-col">
+      <a href="#home" class="footer-logo-link" aria-label="Flavored - Back to top">
+        <Logo tone="cream" />
+      </a>
+    </div>
+
+    {/* Column 2: Our Services */}
+    <div class="footer-col">
+      <h3 class="footer-col-title">{footer.services.title}</h3>
+      <ul class="footer-links-list" role="list">
+        {footer.services.links.map((link) => (
+          <li>
+            <a href="#menu" class="footer-link">
+              {link}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+
+    {/* Column 3: Our Company */}
+    <div class="footer-col">
+      <h3 class="footer-col-title">{footer.company.title}</h3>
+      <ul class="footer-links-list" role="list">
+        {footer.company.links.map((link) => (
+          <li>
+            <a href="#about" class="footer-link">
+              {link}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+
+    {/* Column 4: Address */}
+    <div class="footer-col">
+      <h3 class="footer-col-title">{footer.address.title}</h3>
+      <div class="footer-address-lines">
+        {footer.address.lines.map((line) => (
+          <p class="address-line">{line}</p>
+        ))}
+      </div>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    position: relative;
+    padding-top: clamp(60px, 7vw, 90px);
+    padding-bottom: clamp(24px, 3.5vw, 40px);
+    width: 100%;
+    margin-top: clamp(40px, 5vw, 80px);
+  }
+
+  /* Spilling beans in the bottom-left corner of the shell */
+  .footer-beans-corner {
+    position: absolute;
+    bottom: -35px;
+    left: -48px;
+    width: 140px;
+    height: 260px;
+    pointer-events: none;
+    z-index: 10;
+    overflow: visible;
+  }
+
+  .footer-grid {
+    display: grid;
+    grid-template-columns: 1.25fr 1fr 1fr 1fr;
+    gap: clamp(24px, 3vw, 48px);
+    align-items: flex-start;
+  }
+
+  .footer-col {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .footer-logo-link {
+    text-decoration: none;
+    display: inline-block;
+  }
+
+  .footer-col-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--espresso-900);
+    margin-bottom: 18px;
+  }
+
+  .footer-links-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .footer-link {
+    font-size: 13px;
+    color: var(--espresso-900);
+    opacity: 0.85;
+    text-decoration: none;
+    transition: opacity 0.2s ease;
+  }
+  .footer-link:hover {
+    opacity: 1;
+    text-decoration: underline;
+  }
+
+  .footer-address-lines {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .address-line {
+    font-size: 13px;
+    color: var(--espresso-900);
+    opacity: 0.85;
+    line-height: 1.5;
+  }
+
+  @media (max-width: 900px) {
+    .footer-grid {
+      grid-template-columns: 1fr 1fr;
+      gap: 36px;
+    }
+    .brand-col {
+      grid-column: 1 / -1;
+    }
+  }
+
+  @media (max-width: 540px) {
+    .footer-grid {
+      grid-template-columns: 1fr;
+      gap: 28px;
+    }
+    .footer-beans-corner {
+      left: -15px;
+      bottom: -20px;
+      transform: scale(0.85);
+    }
+  }
+</style>

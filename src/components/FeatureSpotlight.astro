@@ -1,0 +1,182 @@
+---
+import CupArt from './CupArt.astro';
+import BeanScatter from './BeanScatter.astro';
+import { spotlightBeans } from '../data/beans';
+import { siteData, formatPrice } from '../data/site';
+
+const { spotlight } = siteData;
+const formattedPrice = formatPrice(spotlight.price);
+---
+
+<section class="spotlight-section" id="about" aria-labelledby="spotlight-heading">
+  <div class="spotlight-grid">
+    {/* Left Column: Copy and Learn More CTA */}
+    <div class="spotlight-text" data-reveal>
+      <h2 class="spotlight-heading" id="spotlight-heading">
+        {spotlight.heading}
+      </h2>
+      <p class="spotlight-paragraph">
+        {spotlight.body}
+      </p>
+      <div class="spotlight-cta">
+        <a href={spotlight.ctaHref} class="btn-pill btn-gradient learn-more-pill">
+          {spotlight.ctaText}
+        </a>
+      </div>
+    </div>
+
+    {/* Right Column: ~520px Stage with 340px Cup, Price Badge, and Scattered Beans */}
+    <div class="spotlight-visual-stage" aria-hidden="true" data-reveal>
+      {/* Scattered Dark Roast Coffee Beans surrounding the cup */}
+      <BeanScatter
+        beans={spotlightBeans}
+        stageWidth={500}
+        stageHeight={500}
+        class="stage-beans"
+      />
+
+      {/* Centered Large Circular Latte Cup (340px) */}
+      <div class="spotlight-cup">
+        <CupArt
+          variant="rosetta"
+          size={340}
+          withSaucer={false}
+          withHandle={false}
+        />
+      </div>
+
+      {/* Frosted Glass Price Badge at top right */}
+      <div class="glass-price-badge">
+        <span class="badge-price-text">{formattedPrice}</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .spotlight-section {
+    position: relative;
+    margin-top: clamp(80px, 9.5vw, 140px);
+    padding-block: clamp(30px, 4vw, 60px);
+  }
+  .spotlight-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.05fr;
+    align-items: center;
+    gap: clamp(32px, 5vw, 64px);
+  }
+  .spotlight-text {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    max-width: 480px;
+  }
+  .spotlight-heading {
+    font-size: var(--font-h2);
+    font-weight: 700;
+    line-height: 1.25;
+    color: var(--espresso-900);
+    max-width: 26ch;
+    margin-bottom: 20px;
+  }
+  .spotlight-paragraph {
+    font-size: var(--font-body);
+    line-height: 1.6;
+    color: var(--text-body);
+    margin-bottom: 30px;
+  }
+  .learn-more-pill {
+    padding: 10px 26px;
+    font-size: 13px;
+    font-weight: 500;
+  }
+
+  /* Visual stage */
+  .spotlight-visual-stage {
+    position: relative;
+    width: min(500px, 100%);
+    height: 500px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-inline: auto;
+  }
+  .stage-beans {
+    z-index: 1;
+  }
+  .spotlight-cup {
+    position: relative;
+    z-index: 2;
+    filter: drop-shadow(0 28px 48px rgba(35, 12, 8, 0.45));
+    transition: transform 0.4s ease;
+  }
+  .spotlight-cup:hover {
+    transform: scale(1.02);
+  }
+
+  /* Frosted Glass Price Badge at Top Right (~88x80, radius 26) */
+  .glass-price-badge {
+    position: absolute;
+    top: 75px;
+    right: 20px;
+    width: 88px;
+    height: 78px;
+    border-radius: 26px;
+    background: rgba(250, 240, 222, 0.85);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid rgba(255, 255, 255, 0.65);
+    box-shadow: 0 16px 32px -8px rgba(40, 15, 8, 0.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    animation: floatBadge 6s ease-in-out infinite alternate;
+  }
+  .badge-price-text {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--espresso-900);
+    letter-spacing: -0.02em;
+  }
+
+  @keyframes floatBadge {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(-6px); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .glass-price-badge {
+      animation: none;
+    }
+  }
+
+  @media (max-width: 900px) {
+    .spotlight-grid {
+      grid-template-columns: 1fr;
+    }
+    .spotlight-visual-stage {
+      order: -1;
+      height: 420px;
+    }
+  }
+
+  @media (max-width: 520px) {
+    .spotlight-visual-stage {
+      height: 340px;
+    }
+    .spotlight-cup :global(svg) {
+      width: 260px !important;
+      height: 260px !important;
+    }
+    .glass-price-badge {
+      top: 30px;
+      right: 10px;
+      width: 74px;
+      height: 66px;
+    }
+    .badge-price-text {
+      font-size: 20px;
+    }
+  }
+</style>

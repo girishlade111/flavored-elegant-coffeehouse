@@ -1,0 +1,220 @@
+---
+import Icon from './Icon.astro';
+import ProductCard from './ProductCard.astro';
+import { siteData } from '../data/site';
+
+const { phoneMenu } = siteData.app;
+---
+
+<div class="phone-screen phone-menu" aria-label="Coffee shop app menu screen">
+  {/* Top Bar: Back Chevron */}
+  <div class="phone-top-bar">
+    <button type="button" class="phone-back-btn" aria-label="Go back">
+      <Icon name="chevron-left" size={16} />
+    </button>
+  </div>
+
+  {/* Header: Title "Coffee" & Mini "View Menu" Button */}
+  <div class="phone-header-row">
+    <h3 class="phone-title">{phoneMenu.title}</h3>
+    <button type="button" class="phone-mini-pill" aria-label="View coffee menu">
+      {phoneMenu.cta}
+    </button>
+  </div>
+
+  {/* Row of 4 Category Chips */}
+  <div class="phone-chips-row">
+    {phoneMenu.chips.map((chip) => (
+      <div class="phone-chip">
+        <Icon name={chip as any} size={15} />
+      </div>
+    ))}
+  </div>
+
+  {/* Compact Cards: Americano & Cappuccino */}
+  <div class="phone-cards-row">
+    {phoneMenu.products.map((p) => (
+      <ProductCard
+        name={p.name}
+        desc={p.desc}
+        price={p.price}
+        art={p.art as any}
+        compact={true}
+      />
+    ))}
+  </div>
+
+  {/* Wide Translucent Card: Moccaccino */}
+  <div class="moccaccino-card">
+    <h4 class="moccaccino-title">{phoneMenu.moccaccino.name}</h4>
+    <p class="moccaccino-desc">{phoneMenu.moccaccino.desc}</p>
+  </div>
+
+  {/* Floating Bottom Nav Dock */}
+  <div class="phone-bottom-nav">
+    <button type="button" class="phone-nav-item is-active" aria-label="Home">
+      <span class="active-glow-circle"></span>
+      <Icon name="home" size={17} />
+    </button>
+    <button type="button" class="phone-nav-item" aria-label="Cart">
+      <Icon name="cart" size={17} />
+    </button>
+    <button type="button" class="phone-nav-item" aria-label="User Profile">
+      <Icon name="user" size={17} />
+    </button>
+    <button type="button" class="phone-nav-item" aria-label="Settings">
+      <Icon name="sliders" size={17} />
+    </button>
+  </div>
+</div>
+
+<style>
+  .phone-screen {
+    width: 316px;
+    height: 640px;
+    border-radius: 44px;
+    background: linear-gradient(165deg, #C7B2B0 0%, #E4D6CA 50%, #F1E8DA 100%);
+    border: 1px solid rgba(255, 255, 255, 0.55);
+    box-shadow: var(--shadow-card);
+    padding: 24px 20px 20px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    user-select: none;
+  }
+
+  .phone-top-bar {
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+  }
+  .phone-back-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.45);
+    border: none;
+    color: var(--espresso-900);
+    cursor: pointer;
+  }
+
+  .phone-header-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+  }
+  .phone-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--espresso-900);
+  }
+  .phone-mini-pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 26px;
+    padding: 0 12px;
+    border-radius: var(--radius-pill);
+    background: var(--espresso-900);
+    color: var(--cream-50);
+    font-size: 10px;
+    font-weight: 500;
+    border: none;
+    cursor: pointer;
+  }
+
+  /* 4 Mini Category Chips */
+  .phone-chips-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 38px;
+  }
+  .phone-chip {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.65);
+    color: var(--espresso-900);
+  }
+
+  /* Cards Row */
+  .phone-cards-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 18px;
+  }
+
+  /* Moccaccino wide card */
+  .moccaccino-card {
+    background: rgba(255, 255, 255, 0.4);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.55);
+    border-radius: 20px;
+    padding: 14px 16px;
+    margin-top: 8px;
+  }
+  .moccaccino-title {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--espresso-900);
+    margin-bottom: 4px;
+  }
+  .moccaccino-desc {
+    font-size: 7.5px;
+    color: var(--espresso-900);
+    opacity: 0.85;
+    line-height: 1.35;
+  }
+
+  /* Floating Bottom Nav Dock */
+  .phone-bottom-nav {
+    position: absolute;
+    bottom: 14px;
+    left: 14px;
+    right: 14px;
+    height: 48px;
+    border-radius: var(--radius-pill);
+    background: var(--espresso-900);
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    padding-inline: 8px;
+    box-shadow: 0 10px 24px rgba(35, 12, 8, 0.4);
+    z-index: 10;
+  }
+  .phone-nav-item {
+    position: relative;
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.7);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+  }
+  .phone-nav-item.is-active {
+    color: #FFFFFF;
+  }
+  .active-glow-circle {
+    position: absolute;
+    inset: 4px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.18);
+  }
+</style>

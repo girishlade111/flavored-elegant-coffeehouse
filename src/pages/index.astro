@@ -1,0 +1,22 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Navbar from '../components/Navbar.astro';
+import Hero from '../components/Hero.astro';
+import ProductShowcase from '../components/ProductShowcase.astro';
+import FeatureSpotlight from '../components/FeatureSpotlight.astro';
+import AppSection from '../components/AppSection.astro';
+import ReserveCTA from '../components/ReserveCTA.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<BaseLayout>
+  <Navbar />
+  <main id="main-content">
+    <Hero />
+    <ProductShowcase />
+    <FeatureSpotlight />
+    <AppSection />
+    <ReserveCTA />
+  </main>
+  <Footer />
+</BaseLayout>

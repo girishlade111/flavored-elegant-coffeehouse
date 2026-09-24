@@ -1,0 +1,163 @@
+---
+export interface Props {
+  name:
+    | 'cup-steam'
+    | 'iced-glass'
+    | 'takeaway-mug'
+    | 'beans'
+    | 'cart'
+    | 'heart'
+    | 'home'
+    | 'user'
+    | 'sliders'
+    | 'chevron-left'
+    | 'plus'
+    | 'apple'
+    | 'google-play'
+    | 'menu'
+    | 'close';
+  size?: number | string;
+  class?: string;
+  filled?: boolean;
+}
+
+const { name, size = 24, class: className = '', filled = false } = Astro.props;
+---
+
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width={size}
+  height={size}
+  viewBox="0 0 24 24"
+  fill={filled ? 'currentColor' : 'none'}
+  stroke="currentColor"
+  stroke-width="1.6"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  class={`icon icon-${name} ${className}`}
+  aria-hidden="true"
+>
+  {name === 'cup-steam' && (
+    <g>
+      <path d="M4 10h12v5a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4v-5z" />
+      <path d="M16 11h2a2 2 0 0 1 2 2v0a2 2 0 0 1-2 2h-2" />
+      <path d="M7 4c0 1.5-1 2-1 3" />
+      <path d="M11 3c0 1.5-1 2.5-1 4" />
+      <path d="M15 4c0 1.5-1 2-1 3" />
+      <path d="M3 19h14" />
+    </g>
+  )}
+
+  {name === 'iced-glass' && (
+    <g>
+      {/* Tall iced glass with dome lid and straw */}
+      <path d="M7 8l1.2 12a2 2 0 0 0 2 1.8h3.6a2 2 0 0 0 2-1.8L17 8" />
+      <path d="M6 8h12" />
+      <path d="M7 8a5 5 0 0 1 10 0" />
+      <path d="M12 3l1.8-1.5" />
+      <path d="M12 3v5" />
+      <line x1="9" y1="12" x2="15" y2="12" stroke-dasharray="1 2" />
+    </g>
+  )}
+
+  {name === 'takeaway-mug' && (
+    <g>
+      {/* Takeaway mug with lid and handle */}
+      <path d="M6 7l1 13a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-13" />
+      <path d="M5 4h14a1 1 0 0 1 1 1v2H4V5a1 1 0 0 1 1-1z" />
+      <path d="M9 2h6v2H9z" />
+      <path d="M17 9h2a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2h-1.6" />
+    </g>
+  )}
+
+  {name === 'beans' && (
+    <g>
+      {/* Two coffee beans */}
+      <ellipse cx="9" cy="13" rx="5" ry="7" transform="rotate(-30 9 13)" />
+      <path d="M6.5 7.5c1.5 2 3.5 9 5 11" />
+      <ellipse cx="16" cy="11" rx="4" ry="6" transform="rotate(25 16 11)" />
+      <path d="M17.5 6c-1 2-2 7-3 10" />
+    </g>
+  )}
+
+  {name === 'cart' && (
+    <g>
+      <circle cx="9" cy="20" r="1.5" fill="currentColor" />
+      <circle cx="18" cy="20" r="1.5" fill="currentColor" />
+      <path d="M3 4h2l2.5 11h11l2-8H6.5" />
+    </g>
+  )}
+
+  {name === 'heart' && (
+    <path d="M19.5 12.572l-7.5 7.428l-7.5 -7.428a5 5 0 1 1 7.5 -6.566a5 5 0 1 1 7.5 6.572" />
+  )}
+
+  {name === 'home' && (
+    <g>
+      <path d="M3 10.5L12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1v-9.5z" />
+    </g>
+  )}
+
+  {name === 'user' && (
+    <g>
+      <circle cx="12" cy="7" r="4" />
+      <path d="M5 21v-2a5 5 0 0 1 5-5h4a5 5 0 0 1 5 5v2" />
+    </g>
+  )}
+
+  {name === 'sliders' && (
+    <g>
+      <line x1="4" y1="20" x2="4" y2="13" />
+      <line x1="4" y1="9" x2="4" y2="4" />
+      <circle cx="4" cy="11" r="2" />
+      <line x1="12" y1="20" x2="12" y2="15" />
+      <line x1="12" y1="11" x2="12" y2="4" />
+      <circle cx="12" cy="13" r="2" />
+      <line x1="20" y1="20" x2="20" y2="9" />
+      <line x1="20" y1="5" x2="20" y2="4" />
+      <circle cx="20" cy="7" r="2" />
+    </g>
+  )}
+
+  {name === 'chevron-left' && (
+    <path d="M15 18l-6-6 6-6" />
+  )}
+
+  {name === 'plus' && (
+    <g>
+      <line x1="12" y1="5" x2="12" y2="19" />
+      <line x1="5" y1="12" x2="19" y2="12" />
+    </g>
+  )}
+
+  {name === 'apple' && (
+    <path
+      fill="currentColor"
+      stroke="none"
+      d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 6.37c.62-.75 1.04-1.8 0.93-2.85-.9.04-1.99.6-2.63 1.35-.57.65-1.07 1.71-.94 2.73 1 .08 2.02-.48 2.64-1.23z"
+    />
+  )}
+
+  {name === 'google-play' && (
+    <path
+      fill="currentColor"
+      stroke="none"
+      d="M3.609 1.814L13.793 12 3.61 22.186a1.99 1.99 0 0 1-.61-1.446V3.26c0-.547.224-1.045.609-1.446zm11.597 8.773l2.25-1.298a2.003 2.003 0 0 0 0-3.478l-2.25-1.3-3.045 3.045 3.045 3.031zm-4.457 4.444L4.47 21.31a1.97 1.97 0 0 0 1.77.19l10.37-5.986-5.861-5.861zm0-6.062l5.86-5.861L6.24 2.5a1.97 1.97 0 0 0-1.77.19l6.279 6.279z"
+    />
+  )}
+
+  {name === 'menu' && (
+    <g>
+      <line x1="3" y1="6" x2="21" y2="6" />
+      <line x1="3" y1="12" x2="21" y2="12" />
+      <line x1="3" y1="18" x2="21" y2="18" />
+    </g>
+  )}
+
+  {name === 'close' && (
+    <g>
+      <line x1="18" y1="6" x2="6" y2="18" />
+      <line x1="6" y1="6" x2="18" y2="18" />
+    </g>
+  )}
+</svg>

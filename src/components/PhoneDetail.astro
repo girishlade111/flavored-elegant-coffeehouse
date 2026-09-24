@@ -1,0 +1,208 @@
+---
+import Icon from './Icon.astro';
+import CupArt from './CupArt.astro';
+import { siteData, formatPrice } from '../data/site';
+
+const { phoneDetail } = siteData.app;
+const formattedPrice = formatPrice(phoneDetail.price);
+---
+
+<div class="phone-screen phone-detail" aria-label="Latte Grand product detail screen">
+  {/* Top Bar: Back Chevron */}
+  <div class="phone-top-bar">
+    <button type="button" class="phone-back-btn" aria-label="Go back">
+      <Icon name="chevron-left" size={16} />
+    </button>
+  </div>
+
+  {/* Huge Overflowing Top-down Heart Latte Cup */}
+  <div class="phone-cup-overflow" aria-hidden="true">
+    <CupArt
+      variant="heart"
+      size={290}
+      withSaucer={true}
+      withHandle={true}
+      class="detail-cup"
+    />
+  </div>
+
+  {/* Content Container (Title, description, price, CTA) */}
+  <div class="detail-content">
+    <h3 class="detail-title">{phoneDetail.title}</h3>
+    <p class="detail-desc">{phoneDetail.desc}</p>
+
+    <div class="detail-bottom-section">
+      <div class="price-header-label">{phoneDetail.totalPriceLabel}</div>
+
+      <div class="detail-actions-row">
+        {/* Light Cream Price Chip */}
+        <div class="detail-price-chip">
+          {formattedPrice}
+        </div>
+
+        {/* 30px Heart Button */}
+        <button
+          type="button"
+          class="detail-heart-btn"
+          aria-label="Add Latte Grand to favorites"
+        >
+          <Icon name="heart" size={15} />
+        </button>
+
+        {/* Espresso Pill "Add to Cart" with Plus Icon */}
+        <button
+          type="button"
+          class="detail-cart-pill"
+          aria-label="Add to Cart"
+        >
+          <span>{phoneDetail.cta}</span>
+          <span class="plus-circle-badge">
+            <Icon name="plus" size={12} />
+          </span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .phone-screen {
+    width: 316px;
+    height: 640px;
+    border-radius: 44px;
+    background: linear-gradient(165deg, #C7B2B0 0%, #E4D6CA 50%, #F1E8DA 100%);
+    border: 1px solid rgba(255, 255, 255, 0.55);
+    box-shadow: 0 35px 70px -25px rgba(35, 12, 8, 0.45);
+    padding: 24px 20px 20px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    overflow: visible; /* Important: cup overflows! */
+    user-select: none;
+    z-index: 10;
+  }
+
+  .phone-top-bar {
+    position: relative;
+    z-index: 20;
+    margin-bottom: 8px;
+  }
+  .phone-back-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.55);
+    border: none;
+    color: var(--espresso-900);
+    cursor: pointer;
+  }
+
+  /* Cup positioned so it overflows the top and left edge */
+  .phone-cup-overflow {
+    position: absolute;
+    top: -15px;
+    left: -40px;
+    width: 290px;
+    height: 290px;
+    pointer-events: none;
+    z-index: 15;
+  }
+
+  .detail-content {
+    margin-top: 245px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    z-index: 20;
+  }
+
+  .detail-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--espresso-900);
+    margin-bottom: 10px;
+  }
+
+  .detail-desc {
+    font-size: 8.5px;
+    line-height: 1.45;
+    color: var(--espresso-900);
+    opacity: 0.85;
+  }
+
+  .detail-bottom-section {
+    margin-top: auto;
+    padding-bottom: 12px;
+  }
+
+  .price-header-label {
+    font-size: 8.5px;
+    font-weight: 500;
+    color: var(--espresso-900);
+    opacity: 0.8;
+    margin-bottom: 6px;
+  }
+
+  .detail-actions-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .detail-price-chip {
+    background: rgba(255, 255, 255, 0.85);
+    border: 1px solid rgba(255, 255, 255, 0.9);
+    border-radius: var(--radius-pill);
+    padding: 6px 12px;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--espresso-900);
+    box-shadow: 0 4px 10px rgba(40, 15, 8, 0.08);
+  }
+
+  .detail-heart-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    color: var(--espresso-900);
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(40, 15, 8, 0.08);
+  }
+
+  .detail-cart-pill {
+    flex: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 34px;
+    padding-left: 14px;
+    padding-right: 4px;
+    border-radius: var(--radius-pill);
+    background: var(--espresso-900);
+    color: var(--cream-50);
+    font-size: 10px;
+    font-weight: 500;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 6px 14px -3px rgba(35, 12, 8, 0.4);
+  }
+
+  .plus-circle-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+    color: var(--cream-50);
+  }
+</style>

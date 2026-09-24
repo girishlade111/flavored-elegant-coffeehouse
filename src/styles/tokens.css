@@ -1,0 +1,26 @@
+:root {
+  --espresso-900: #2A0A0A;
+  --espresso-800: #3A100C;
+  --caramel-500: #9A5A22;
+  --cream-50: #FFF8EE;
+  --cream-100: #F3EADB;
+  --cream-200: #E9DFCE;
+  --taupe-400: #B8AC9C;
+  --taupe-600: #8E8477;
+  --text-body: rgba(42, 10, 10, 0.85);
+  --glass-fill: rgba(255, 255, 255, 0.28);
+  --glass-border: rgba(255, 255, 255, 0.40);
+  --shadow-btn: 0 12px 24px -8px rgba(42, 10, 10, 0.55);
+  --shadow-card: 0 30px 60px -30px rgba(40, 15, 10, 0.40);
+  --radius-pill: 999px;
+  --radius-card: 40px;
+  --radius-chip: 18px;
+  --radius-shell: 56px;
+
+  /* Typography scale */
+  --font-h1: clamp(40px, 4.4vw, 64px);
+  --font-h2: clamp(22px, 2.4vw, 34px);
+  --font-body: clamp(14px, 1.1vw, 16px);
+  --font-small: 13px;
+  --font-eyebrow: 11px;
+}

@@ -1,0 +1,236 @@
+---
+import CupArt from './CupArt.astro';
+import Icon from './Icon.astro';
+import { formatPrice } from '../data/site';
+
+export interface Props {
+  name: string;
+  desc: string;
+  price: number;
+  art?: 'rosetta' | 'bear' | 'heart';
+  tone?: 'glass' | 'cream';
+  compact?: boolean;
+  class?: string;
+}
+
+const {
+  name,
+  desc,
+  price,
+  art = 'rosetta',
+  tone = 'glass',
+  compact = false,
+  class: className = '',
+} = Astro.props;
+
+const formattedPrice = formatPrice(price);
+---
+
+<div
+  class={`product-card tone-${tone} ${compact ? 'is-compact' : ''} ${className}`}
+  data-product-name={name}
+>
+  {/* Overlapping Top-down Cup */}
+  <div class="card-cup-wrapper">
+    <CupArt
+      variant={art}
+      size={compact ? 72 : 200}
+      withSaucer={false}
+      class="card-cup-svg"
+    />
+  </div>
+
+  {/* Card Body Info */}
+  <div class="card-body">
+    <h3 class="product-title">{name}</h3>
+    <p class="product-desc">{desc}</p>
+
+    {!compact && (
+      <div class="card-actions" role="group" aria-label={`Actions for ${name}`}>
+        <button
+          type="button"
+          class="card-action-btn btn-cart"
+          aria-label={`Add ${name} to cart`}
+        >
+          <Icon name="cart" size={17} />
+        </button>
+
+        <button
+          type="button"
+          class="card-action-btn btn-heart"
+          aria-label={`Save ${name} to favorites`}
+          aria-pressed="false"
+        >
+          <Icon name="heart" size={17} />
+        </button>
+      </div>
+    )}
+  </div>
+
+  {/* Price Badge on bottom edge */}
+  <div class="card-price-pill">
+    {formattedPrice}
+  </div>
+</div>
+
+<style>
+  .product-card {
+    position: relative;
+    width: clamp(260px, 24vw, 310px);
+    min-height: 280px;
+    border-radius: var(--radius-card);
+    padding: 110px 24px 32px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+  }
+
+  .product-card:hover {
+    transform: translateY(-4px);
+  }
+
+  /* Tone Glass */
+  .tone-glass {
+    background: rgba(255, 255, 255, 0.28);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.40);
+    box-shadow: 0 20px 40px -15px rgba(40, 15, 8, 0.18);
+  }
+
+  /* Tone Cream */
+  .tone-cream {
+    background: rgba(250, 243, 230, 0.78);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.65);
+    box-shadow: 0 20px 40px -15px rgba(40, 15, 8, 0.18);
+  }
+
+  /* Top overlapping cup */
+  .card-cup-wrapper {
+    position: absolute;
+    top: -86px;
+    left: 50%;
+    transform: translateX(-50%);
+    pointer-events: none;
+    z-index: 5;
+  }
+
+  .card-body {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+    width: 100%;
+  }
+
+  .product-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--espresso-900);
+    line-height: 1.2;
+    margin-bottom: 6px;
+  }
+
+  .product-desc {
+    font-size: 12px;
+    line-height: 1.45;
+    color: var(--espresso-900);
+    opacity: 0.85;
+    margin-bottom: 24px;
+    min-height: 34px;
+  }
+
+  .card-actions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    width: 100%;
+    margin-top: auto;
+  }
+
+  .card-action-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    background: rgba(255, 255, 255, 0.65);
+    color: var(--espresso-900);
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(40, 15, 8, 0.1);
+    transition: transform 0.2s, background 0.2s, color 0.2s;
+  }
+  .card-action-btn:hover {
+    background: #FFFFFF;
+    transform: scale(1.08);
+  }
+  .card-action-btn:active {
+    transform: scale(0.92);
+  }
+
+  /* Favorite button active state */
+  .btn-heart[aria-pressed="true"] {
+    background: #FFECE8;
+    color: #C02020;
+    border-color: #FFAAA0;
+  }
+
+  /* Bottom centered price pill */
+  .card-price-pill {
+    position: absolute;
+    bottom: -14px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--espresso-900);
+    color: var(--cream-50);
+    font-size: 14px;
+    font-weight: 700;
+    padding: 6px 18px;
+    border-radius: var(--radius-pill);
+    box-shadow: 0 8px 16px -4px rgba(40, 15, 8, 0.5);
+    white-space: nowrap;
+    border-top: 1px solid rgba(255, 255, 255, 0.15);
+    z-index: 6;
+  }
+
+  /* COMPACT MODE FOR MOBILE PHONES */
+  .product-card.is-compact {
+    width: 118px;
+    min-height: 125px;
+    border-radius: 18px;
+    padding: 42px 8px 16px;
+    background: rgba(255, 255, 255, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    box-shadow: 0 8px 16px -4px rgba(40, 15, 8, 0.1);
+  }
+  .product-card.is-compact:hover {
+    transform: none;
+  }
+  .product-card.is-compact .card-cup-wrapper {
+    top: -34px;
+  }
+  .product-card.is-compact .product-title {
+    font-size: 9px;
+    font-weight: 700;
+    margin-bottom: 2px;
+  }
+  .product-card.is-compact .product-desc {
+    font-size: 6.5px;
+    line-height: 1.25;
+    margin-bottom: 0;
+    min-height: auto;
+    opacity: 0.75;
+  }
+  .product-card.is-compact .card-price-pill {
+    bottom: -8px;
+    font-size: 8px;
+    font-weight: 700;
+    padding: 2.5px 10px;
+  }
+</style>

@@ -1,0 +1,310 @@
+---
+export interface Props {
+  variant: 'double-heart' | 'heart' | 'rosetta' | 'bear' | 'leaf';
+  size?: number | string;
+  withSaucer?: boolean;
+  withHandle?: boolean;
+  class?: string;
+}
+
+const {
+  variant = 'double-heart',
+  size = 200,
+  withSaucer = false,
+  withHandle = false,
+  class: className = '',
+} = Astro.props;
+
+// Generate unique id prefix for gradients to prevent collisions
+const id = `cup-${variant}-${Math.floor(Math.random() * 10000)}`;
+---
+
+<div class={`cup-art-container ${className}`} style={`width: ${typeof size === 'number' ? `${size}px` : size}; height: ${typeof size === 'number' ? `${size}px` : size};`}>
+  <svg
+    viewBox="0 0 400 400"
+    width="100%"
+    height="100%"
+    xmlns="http://www.w3.org/2000/svg"
+    class="cup-art-svg"
+    aria-hidden="true"
+  >
+    <defs>
+      {/* Drop shadow for entire cup */}
+      <filter id={`${id}-shadow`} x="-20%" y="-20%" width="150%" height="150%">
+        <feDropShadow dx="0" dy="16" stdDeviation="22" flood-color="rgba(35, 12, 8, 0.38)" />
+      </filter>
+
+      {/* Inner shadow for cup rim depth */}
+      <filter id={`${id}-inner-depth`}>
+        <feOffset dx="0" dy="4" />
+        <feGaussianBlur stdDeviation="6" result="offset-blur" />
+        <feComposite operator="out" in="SourceGraphic" in2="offset-blur" result="inverse" />
+        <feFlood flood-color="rgba(40, 15, 8, 0.45)" flood-opacity="0.8" result="color" />
+        <feComposite operator="in" in="color" in2="inverse" result="shadow" />
+        <feComposite operator="over" in="shadow" in2="SourceGraphic" />
+      </filter>
+
+      {/* Saucer gradient */}
+      <radialGradient id={`${id}-saucer`} cx="42%" cy="40%" r="58%">
+        <stop offset="0%" stop-color="#FFFFFF" />
+        <stop offset="65%" stop-color="#F7F5F0" />
+        <stop offset="85%" stop-color="#ECE7DE" />
+        <stop offset="100%" stop-color="#D9D2C5" />
+      </radialGradient>
+
+      {/* Cup ceramic rim gradient */}
+      <linearGradient id={`${id}-rim`} x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#FFFFFF" />
+        <stop offset="45%" stop-color="#FBF9F5" />
+        <stop offset="80%" stop-color="#EBE5D8" />
+        <stop offset="100%" stop-color="#D5CBB9" />
+      </linearGradient>
+
+      {/* Crema radial gradient: warm golden-brown caramel into darker roasted edge */}
+      <radialGradient id={`${id}-crema`} cx="48%" cy="46%" r="52%">
+        <stop offset="0%" stop-color="#F4DDC0" />
+        <stop offset="35%" stop-color="#E2B785" />
+        <stop offset="70%" stop-color="#C58448" />
+        <stop offset="90%" stop-color="#8E4F22" />
+        <stop offset="100%" stop-color="#5B290F" />
+      </radialGradient>
+
+      {/* Dark cocoa powder gradient for dusted hearts */}
+      <radialGradient id={`${id}-cocoa-dark`} cx="40%" cy="35%" r="65%">
+        <stop offset="0%" stop-color="#552213" />
+        <stop offset="60%" stop-color="#3D150B" />
+        <stop offset="100%" stop-color="#240A06" />
+      </radialGradient>
+
+      {/* Light cocoa powder gradient */}
+      <radialGradient id={`${id}-cocoa-light`} cx="45%" cy="40%" r="60%">
+        <stop offset="0%" stop-color="#7D3B1E" />
+        <stop offset="70%" stop-color="#582410" />
+        <stop offset="100%" stop-color="#3A1208" />
+      </radialGradient>
+
+      {/* Milk froth gradient for rosetta / leaf */}
+      <radialGradient id={`${id}-froth`} cx="48%" cy="42%" r="55%">
+        <stop offset="0%" stop-color="#FFFFFF" />
+        <stop offset="75%" stop-color="#FFF5E5" />
+        <stop offset="100%" stop-color="#F4E3C8" />
+      </radialGradient>
+
+      {/* Bear foam snout gradient */}
+      <radialGradient id={`${id}-bear-muzzle`} cx="50%" cy="45%" r="50%">
+        <stop offset="0%" stop-color="#FFFDF9" />
+        <stop offset="100%" stop-color="#F0DFCA" />
+      </radialGradient>
+    </defs>
+
+    <g filter={`url(#${id}-shadow)`}>
+      {/* 1. SAUCER (Optional, for hero cup) */}
+      {withSaucer && (
+        <g class="saucer-layer">
+          <circle cx="200" cy="200" r="190" fill={`url(#${id}-saucer)`} />
+          {/* Saucer inner indent line */}
+          <circle cx="200" cy="200" r="142" fill="none" stroke="#E2DACD" stroke-width="2.5" opacity="0.85" />
+          <circle cx="200" cy="200" r="140" fill="none" stroke="#FFFFFF" stroke-width="2" opacity="0.9" />
+        </g>
+      )}
+
+      {/* 2. CUP HANDLE (at ~4-5 o'clock) */}
+      {withHandle && (
+        <g class="handle-layer">
+          <path
+            d="M295 245 C345 285, 360 300, 342 320 C322 340, 290 315, 255 288"
+            fill="none"
+            stroke={`url(#${id}-rim)`}
+            stroke-width="32"
+            stroke-linecap="round"
+          />
+          <path
+            d="M292 248 C338 285, 350 298, 336 312 C320 328, 294 308, 260 286"
+            fill="none"
+            stroke="#FFFFFF"
+            stroke-width="12"
+            stroke-linecap="round"
+            opacity="0.8"
+          />
+        </g>
+      )}
+
+      {/* 3. CUP BODY & CERAMIC RIM */}
+      <g class="cup-body">
+        {/* Outer cup ceramic thickness */}
+        <circle cx="200" cy="200" r={withSaucer ? "130" : "185"} fill={`url(#${id}-rim)`} />
+        {/* Rim highlight ring */}
+        <circle
+          cx="200"
+          cy="200"
+          r={withSaucer ? "128" : "182"}
+          fill="none"
+          stroke="#FFFFFF"
+          stroke-width="4"
+          opacity="0.9"
+        />
+        {/* Inner rim dark recess */}
+        <circle
+          cx="200"
+          cy="200"
+          r={withSaucer ? "118" : "168"}
+          fill="none"
+          stroke="rgba(60, 25, 12, 0.22)"
+          stroke-width="3"
+        />
+
+        {/* 4. CREMA SURFACE */}
+        <circle
+          cx="200"
+          cy="200"
+          r={withSaucer ? "116" : "166"}
+          fill={`url(#${id}-crema)`}
+        />
+      </g>
+    </g>
+
+    {/* 5. LATTE ART LAYERS */}
+    <g class="latte-art-layer" transform={`scale(${withSaucer ? 0.72 : 1}) translate(${withSaucer ? 78 : 0}, ${withSaucer ? 78 : 0})`}>
+      {/* VARIANT 1: DOUBLE COCOA HEARTS (HERO CUP) */}
+      {(variant === 'double-heart') && (
+        <g class="art-double-heart">
+          {/* Lighter upper-right cocoa heart */}
+          <g transform="translate(225, 175) rotate(22) scale(0.95)">
+            <path
+              d="M0 -35 C-32 -75, -80 -40, -55 5 C-38 35, 0 65, 0 80 C0 65, 38 35, 55 5 C80 -40, 32 -75, 0 -35 Z"
+              fill={`url(#${id}-cocoa-light)`}
+              opacity="0.95"
+            />
+          </g>
+
+          {/* Darker lower-left cocoa heart (overlapping) */}
+          <g transform="translate(180, 220) rotate(-18) scale(1.08)">
+            <path
+              d="M0 -35 C-32 -75, -80 -40, -55 5 C-38 35, 0 65, 0 80 C0 65, 38 35, 55 5 C80 -40, 32 -75, 0 -35 Z"
+              fill={`url(#${id}-cocoa-dark)`}
+            />
+          </g>
+
+          {/* Dusted cocoa flecks texture around hearts */}
+          <circle cx="150" cy="180" r="3.5" fill="#3A1208" opacity="0.75" />
+          <circle cx="140" cy="205" r="2.5" fill="#3A1208" opacity="0.65" />
+          <circle cx="165" cy="155" r="3" fill="#582410" opacity="0.7" />
+          <circle cx="250" cy="245" r="3" fill="#3A1208" opacity="0.65" />
+          <circle cx="230" cy="265" r="2.5" fill="#582410" opacity="0.7" />
+          <circle cx="210" cy="285" r="3.5" fill="#240A06" opacity="0.8" />
+          <circle cx="265" cy="190" r="2" fill="#582410" opacity="0.6" />
+        </g>
+      )}
+
+      {/* VARIANT 2: SINGLE HEART (LATTE GRAND / PHONE) */}
+      {(variant === 'heart') && (
+        <g class="art-single-heart">
+          <g transform="translate(200, 205) rotate(-8) scale(1.35)">
+            <path
+              d="M0 -35 C-32 -75, -80 -40, -55 5 C-38 35, 0 65, 0 80 C0 65, 38 35, 55 5 C80 -40, 32 -75, 0 -35 Z"
+              fill={`url(#${id}-cocoa-dark)`}
+            />
+          </g>
+          {/* Subtle cocoa dust flecks */}
+          <circle cx="155" cy="160" r="3" fill="#3A1208" opacity="0.7" />
+          <circle cx="245" cy="170" r="3.5" fill="#3A1208" opacity="0.75" />
+          <circle cx="225" cy="255" r="2.5" fill="#3A1208" opacity="0.6" />
+          <circle cx="170" cy="245" r="3" fill="#240A06" opacity="0.75" />
+        </g>
+      )}
+
+      {/* VARIANT 3: ROSETTA / LEAF LATTE ART (AMERICANO / FEATURE SPOTLIGHT) */}
+      {(variant === 'rosetta' || variant === 'leaf') && (
+        <g class="art-rosetta" transform="translate(200, 205) rotate(-15)">
+          {/* Stem center streak */}
+          <path
+            d="M0 135 Q2 30, 0 -115"
+            stroke={`url(#${id}-froth)`}
+            stroke-width="12"
+            stroke-linecap="round"
+            fill="none"
+          />
+
+          {/* Top heart tip */}
+          <path
+            d="M0 -115 C-18 -135, -35 -115, -20 -95 C-12 -80, 0 -65, 0 -55 C0 -65, 12 -80, 20 -95 C35 -115, 18 -135, 0 -115 Z"
+            fill={`url(#${id}-froth)`}
+          />
+
+          {/* Leaf tiers - left and right pairs spreading downward */}
+          <g fill={`url(#${id}-froth)`}>
+            {/* Tier 1 */}
+            <path d="M-6 -85 C-38 -105, -60 -75, -12 -58 C-2 -54, 0 -52, 0 -52 C0 -52, 2 -54, 12 -58 C60 -75, 38 -105, 6 -85 Z" />
+            {/* Tier 2 */}
+            <path d="M-8 -55 C-52 -75, -80 -42, -18 -26 C-4 -22, 0 -20, 0 -20 C0 -20, 4 -22, 18 -26 C80 -42, 52 -75, 8 -55 Z" />
+            {/* Tier 3 */}
+            <path d="M-10 -22 C-65 -40, -96 -2, -22 10 C-5 13, 0 16, 0 16 C0 16, 5 13, 22 10 C96 -2, 65 -40, 10 -22 Z" />
+            {/* Tier 4 */}
+            <path d="M-10 12 C-72 -5, -105 35, -25 45 C-6 48, 0 50, 0 50 C0 50, 6 48, 25 45 C105 35, 72 -5, 10 12 Z" />
+            {/* Tier 5 (Base curve) */}
+            <path d="M-10 46 C-65 35, -85 75, -22 80 C-5 82, 0 84, 0 84 C0 84, 5 82, 22 80 C85 75, 65 35, 10 46 Z" />
+            {/* Base droplet */}
+            <circle cx="0" cy="115" r="14" />
+          </g>
+        </g>
+      )}
+
+      {/* VARIANT 4: BEAR FACE (CAPPUCCINO) */}
+      {(variant === 'bear') && (
+        <g class="art-bear" transform="translate(200, 200)">
+          {/* Bear Left Ear */}
+          <circle cx="-62" cy="-62" r="32" fill={`url(#${id}-froth)`} />
+          <circle cx="-62" cy="-62" r="18" fill="#B4733C" />
+
+          {/* Bear Right Ear */}
+          <circle cx="62" cy="-62" r="32" fill={`url(#${id}-froth)`} />
+          <circle cx="62" cy="-62" r="18" fill="#B4733C" />
+
+          {/* Bear Head Circle */}
+          <circle cx="0" cy="0" r="92" fill={`url(#${id}-froth)`} />
+
+          {/* Bear Muzzle Oval */}
+          <ellipse cx="0" cy="22" rx="46" ry="34" fill={`url(#${id}-bear-muzzle)`} />
+
+          {/* Left Eye */}
+          <circle cx="-32" cy="-14" r="8" fill="#3D1808" />
+          <circle cx="-34" cy="-16" r="2.5" fill="#FFFFFF" />
+
+          {/* Right Eye */}
+          <circle cx="32" cy="-14" r="8" fill="#3D1808" />
+          <circle cx="30" cy="-16" r="2.5" fill="#FFFFFF" />
+
+          {/* Nose & Mouth */}
+          <ellipse cx="0" cy="12" rx="11" ry="8" fill="#3D1808" />
+          <path
+            d="M0 20 L0 30 M-12 28 Q0 36 12 28"
+            stroke="#3D1808"
+            stroke-width="4.5"
+            stroke-linecap="round"
+            fill="none"
+          />
+
+          {/* Cheeks */}
+          <circle cx="-48" cy="15" r="12" fill="#E8A682" opacity="0.65" />
+          <circle cx="48" cy="15" r="12" fill="#E8A682" opacity="0.65" />
+        </g>
+      )}
+    </g>
+  </svg>
+</div>
+
+<style>
+  .cup-art-container {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    user-select: none;
+    pointer-events: none;
+  }
+  .cup-art-svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+  }
+</style>

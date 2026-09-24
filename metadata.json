@@ -1,0 +1,6 @@
+{
+  "name": "Flavored - Elegant Coffeehouse",
+  "description": "An elegant coffeehouse landing page for Flavored featuring artisan roasts, handcrafted beverages, and mobile ordering.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

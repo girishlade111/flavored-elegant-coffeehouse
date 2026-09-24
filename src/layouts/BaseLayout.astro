@@ -1,0 +1,156 @@
+---
+import '../styles/global.css';
+
+export interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = 'Flavored | Elegant Coffeehouse - Coffee The Best For You',
+  description = 'Flavored - Elegant coffeehouse shop landing page. Wake up to something special with artisan roasts, handcrafted beverages, and mobile ordering.',
+} = Astro.props;
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site || 'https://flavored-coffeehouse.com');
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'CafeOrCoffeeShop',
+  name: 'Flavored',
+  slogan: 'Wake up to something special.',
+  description: description,
+  priceRange: '$',
+  servesCuisine: ['Coffee', 'Artisan Roasts', 'Espresso', 'Pastries'],
+  hasMenu: `${canonicalURL.href}#menu`,
+};
+---
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalURL} />
+    <meta name="theme-color" content="#2A0A0A" />
+
+    {/* Favicon */}
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    {/* Open Graph / Facebook */}
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+
+    {/* Twitter */}
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+
+    {/* JSON-LD Structured Data */}
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+
+    {/* JS feature detection for graceful progressive enhancement */}
+    <script is:inline>
+      document.documentElement.classList.remove('no-js');
+      document.documentElement.classList.add('js');
+    </script>
+  </head>
+  <body>
+    {/* Accessibility: Skip to Content */}
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    {/* Fixed Full-Viewport Ambient Bokeh Background Layer */}
+    <div class="bg-canvas" aria-hidden="true"></div>
+
+    {/* Single Grand Frosted Glass Shell Wrapping All Content */}
+    <div class="shell">
+      <slot />
+    </div>
+
+    {/* Live Toast Region for screen reader announcements (Cart, favorites) */}
+    <div
+      id="live-announcer"
+      class="sr-only"
+      aria-live="polite"
+      aria-atomic="true"
+    ></div>
+
+    {/* Small Vanilla TypeScript Interaction Bundle (< 5KB) */}
+    <script>
+      // 1. Scroll Reveal with IntersectionObserver
+      if ('IntersectionObserver' in window && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        const revealElements = document.querySelectorAll('[data-reveal]');
+        const observer = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry, idx) => {
+              if (entry.isIntersecting) {
+                setTimeout(() => {
+                  entry.target.classList.add('revealed');
+                }, idx * 60);
+                observer.unobserve(entry.target);
+              }
+            });
+          },
+          { threshold: 0.1, rootMargin: '0px 0px -40px 0px' }
+        );
+
+        revealElements.forEach((el) => observer.observe(el));
+      }
+
+      // 2. Announcer helper for screen readers & polite toast notifications
+      const announcer = document.getElementById('live-announcer');
+      function announce(message: string) {
+        if (!announcer) return;
+        announcer.textContent = '';
+        setTimeout(() => {
+          announcer.textContent = message;
+        }, 50);
+      }
+
+      // 3. Heart button toggles
+      document.querySelectorAll<HTMLButtonElement>('.btn-heart').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const isPressed = btn.getAttribute('aria-pressed') === 'true';
+          btn.setAttribute('aria-pressed', String(!isPressed));
+          btn.style.transform = 'scale(1.25)';
+          setTimeout(() => {
+            btn.style.transform = '';
+          }, 200);
+          const card = btn.closest('.product-card');
+          const name = card?.getAttribute('data-product-name') || 'Item';
+          announce(!isPressed ? `${name} saved to favorites` : `${name} removed from favorites`);
+        });
+      });
+
+      // 4. Cart button interactions
+      document.querySelectorAll<HTMLButtonElement>('.btn-cart').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          btn.style.transform = 'scale(1.22)';
+          setTimeout(() => {
+            btn.style.transform = '';
+          }, 220);
+          const card = btn.closest('.product-card');
+          const name = card?.getAttribute('data-product-name') || 'Coffee';
+          announce(`${name} added to cart`);
+        });
+      });
+    </script>
+
+    <style is:global>
+      .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border-width: 0;
+      }
+    </style>
+  </body>
+</html>

@@ -1,0 +1,208 @@
+---
+import PhoneMenu from './PhoneMenu.astro';
+import PhoneDetail from './PhoneDetail.astro';
+import CupArt from './CupArt.astro';
+import BeanScatter from './BeanScatter.astro';
+import Icon from './Icon.astro';
+import { phoneSeamBeans } from '../data/beans';
+import { siteData } from '../data/site';
+
+const { app } = siteData;
+---
+
+<section class="app-section" aria-labelledby="app-heading">
+  <div class="app-grid">
+    {/* Left Column: Overlapping Mobile Phones + Seam Mini Cup & Beans */}
+    <div class="phones-stage" data-reveal>
+      <div class="phones-pair">
+        {/* Left Phone */}
+        <div class="phone-wrapper phone-left">
+          <PhoneMenu />
+        </div>
+
+        {/* Right Phone (Overlaps Left) */}
+        <div class="phone-wrapper phone-right">
+          <PhoneDetail />
+        </div>
+
+        {/* Floating Accent at Seam (~88% down): 64px Rosetta Latte + ~10 scattered beans */}
+        <div class="phones-seam-accent" aria-hidden="true">
+          <div class="seam-beans-wrapper">
+            <BeanScatter
+              beans={phoneSeamBeans}
+              stageWidth={80}
+              stageHeight={80}
+            />
+          </div>
+          <div class="seam-mini-cup">
+            <CupArt
+              variant="rosetta"
+              size={64}
+              withSaucer={false}
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    {/* Right Column: Title, Paragraph, Store Badges */}
+    <div class="app-info-column" data-reveal>
+      <h2 class="app-heading" id="app-heading">
+        {app.heading}
+      </h2>
+      <p class="app-desc">
+        {app.body}
+      </p>
+
+      {/* Two 60x60 Rounded-square Glass Store Buttons */}
+      <div class="store-buttons-row">
+        {app.badges.map((badge) => (
+          <a
+            href={badge.href}
+            class="store-glass-btn"
+            aria-label={badge.label}
+          >
+            <Icon name={badge.id as any} size={28} />
+          </a>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .app-section {
+    position: relative;
+    margin-top: clamp(80px, 9.5vw, 140px);
+    padding-block: clamp(30px, 4vw, 60px);
+  }
+  .app-grid {
+    display: grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    align-items: center;
+    gap: clamp(32px, 5vw, 64px);
+  }
+
+  /* Phones stage */
+  .phones-stage {
+    position: relative;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+  .phones-pair {
+    position: relative;
+    width: 580px;
+    height: 660px;
+    display: flex;
+  }
+
+  .phone-left {
+    position: absolute;
+    left: 0;
+    top: 20px;
+    z-index: 2;
+  }
+
+  .phone-right {
+    position: absolute;
+    left: 250px;
+    top: 0;
+    z-index: 5;
+  }
+
+  /* Floating accent at the seam between the phones */
+  .phones-seam-accent {
+    position: absolute;
+    left: 232px;
+    bottom: 95px;
+    width: 70px;
+    height: 70px;
+    z-index: 8;
+  }
+  .seam-mini-cup {
+    position: relative;
+    z-index: 2;
+    filter: drop-shadow(0 8px 16px rgba(35, 12, 8, 0.45));
+  }
+  .seam-beans-wrapper {
+    position: absolute;
+    top: -10px;
+    left: -10px;
+    width: 90px;
+    height: 90px;
+    z-index: 1;
+  }
+
+  /* App info right column */
+  .app-info-column {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    max-width: 440px;
+  }
+  .app-heading {
+    font-size: var(--font-h2);
+    font-weight: 700;
+    line-height: 1.25;
+    color: var(--espresso-900);
+    margin-bottom: 20px;
+  }
+  .app-desc {
+    font-size: var(--font-body);
+    line-height: 1.6;
+    color: var(--text-body);
+    margin-bottom: 32px;
+  }
+
+  /* 60x60 Rounded-square Glass App Store Buttons */
+  .store-buttons-row {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+  }
+  .store-glass-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 60px;
+    height: 60px;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.55);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid rgba(255, 255, 255, 0.7);
+    color: var(--espresso-900);
+    box-shadow: 0 8px 20px -4px rgba(40, 15, 8, 0.15);
+    text-decoration: none;
+    transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+  }
+  .store-glass-btn:hover {
+    transform: translateY(-2px);
+    background: rgba(255, 255, 255, 0.85);
+    box-shadow: 0 12px 24px -4px rgba(40, 15, 8, 0.25);
+  }
+  .store-glass-btn:active {
+    transform: scale(0.96);
+  }
+
+  @media (max-width: 1024px) {
+    .app-grid {
+      grid-template-columns: 1fr;
+    }
+    .phones-stage {
+      order: -1;
+      transform-origin: top center;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .phones-pair {
+      transform: scale(0.68);
+      margin-inline: auto;
+      height: 470px;
+      margin-top: -60px;
+      margin-bottom: -60px;
+    }
+  }
+</style>

@@ -1,0 +1,103 @@
+---
+import ProductCard from './ProductCard.astro';
+import { siteData } from '../data/site';
+
+const { products, productsIntro } = siteData;
+---
+
+<section class="showcase-section" id="menu" aria-labelledby="showcase-heading">
+  <div class="showcase-grid">
+    {/* Left Column: 2 Product Cards with overlapping cups */}
+    <div class="cards-column" data-reveal>
+      {products.map((item) => (
+        <ProductCard
+          name={item.name}
+          desc={item.desc}
+          price={item.price}
+          art={item.art}
+          tone={item.tone}
+        />
+      ))}
+    </div>
+
+    {/* Right Column: Editorial Text & Learn More Button */}
+    <div class="text-column" data-reveal>
+      <h2 class="showcase-heading" id="showcase-heading">
+        {productsIntro.heading}
+      </h2>
+      <p class="showcase-paragraph">
+        {productsIntro.body}
+      </p>
+      <div class="showcase-cta">
+        <a href={productsIntro.ctaHref} class="btn-pill btn-gradient learn-more-pill">
+          {productsIntro.ctaText}
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .showcase-section {
+    position: relative;
+    margin-top: clamp(80px, 9vw, 130px);
+    padding-top: 30px;
+    padding-bottom: clamp(40px, 5vw, 70px);
+  }
+  .showcase-grid {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: center;
+    gap: clamp(32px, 5vw, 68px);
+  }
+  .cards-column {
+    display: flex;
+    align-items: center;
+    gap: clamp(20px, 2.4vw, 32px);
+  }
+  .text-column {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    max-width: 440px;
+  }
+  .showcase-heading {
+    font-size: var(--font-h2);
+    font-weight: 700;
+    line-height: 1.25;
+    color: var(--espresso-900);
+    max-width: 20ch;
+    margin-bottom: 18px;
+  }
+  .showcase-paragraph {
+    font-size: var(--font-body);
+    line-height: 1.6;
+    color: var(--text-body);
+    margin-bottom: 28px;
+  }
+  .learn-more-pill {
+    padding: 10px 26px;
+    font-size: 13px;
+    font-weight: 500;
+  }
+
+  @media (max-width: 1024px) {
+    .showcase-grid {
+      grid-template-columns: 1fr;
+      gap: 50px;
+    }
+    .cards-column {
+      justify-content: flex-start;
+      flex-wrap: wrap;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .cards-column {
+      flex-direction: column;
+      align-items: center;
+      gap: 90px;
+      margin-top: 50px;
+    }
+  }
+</style>
