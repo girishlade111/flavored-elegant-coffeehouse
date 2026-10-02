@@ -197,3 +197,8 @@ npm run build
 ## License
 
 MIT
+
+
+---
+
+Built by [Girish Lade](https://ladestack.in) — free tools for everyone, always.
